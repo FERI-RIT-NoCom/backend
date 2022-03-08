@@ -2,8 +2,8 @@
 
 **V backend-u bo implementirano:**<br>
 - Registracija in prijava (z API-jem, spisanim v Express.js).<br> 
-- Dodajanje komentarjev, ki jih objavi prijavljen uporabnik. 
-- Sledenje vseckanih komentarjev.
+- Dodajanje komentarjev prijavljenih uporabnikov.
+- Beleženje uporabnikovih všečkanih komentarjev.
 
 **Implementation in the backend will include the following:**<br>
 - Registration and login will be implemented with the API, written in Express.js.<br>
