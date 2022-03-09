@@ -1,10 +1,13 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+const express = require('express');
+const bodyParser = require('body-parser');
+const client = require('./connection.js');
 
 const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
+app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
+client.connect();
 
 // GET
 app.get('/', (req, res) => {
@@ -13,7 +16,13 @@ app.get('/', (req, res) => {
 
 // TODO - retun data for user
 app.get('/get_user_data/:id', (req, res) => {
-    res.send('Here is data for user with ID:' + req.params.id);
+    client.query(`SELECT * FROM client WHERE id_client = ${req.params.id}`, (err, result) => {
+        if (!err) {
+            res.send(result.rows);
+        } else {
+            res.send(err)
+        }
+    })
 });
 
 // TODO - retun all comments posted by user
@@ -51,6 +60,4 @@ app.post('/new_comment', bodyParser.urlencoded({ extended: false }), (req, res) 
 // TODO - implement liking comments
 app.post('/like/:id', (req, res) => {
     res.send('You liked comment with ID:' + req.params.id);
-})
-
-app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
+});
