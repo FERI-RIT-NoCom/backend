@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+					"raw": "{\r\n    \"username\": \"john\",\r\n    \"password\": \"96d9632f363564cc3032521409cf22a852f2032eec099ed5967c0d000cec607a\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -40,7 +40,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\",\r\n    \"email\": \"admin@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -68,7 +68,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"comment\": \"New comment sent\"\r\n}",
+					"raw": "{\r\n    \"url\": \"www.website.com\",\r\n    \"is_nsfw\": false,\r\n    \"comment\": \"new comment\",\r\n    \"id_client\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
