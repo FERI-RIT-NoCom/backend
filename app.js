@@ -54,16 +54,21 @@ app.post('/login', bodyParser.urlencoded({ extended: false }), (req, res) => {
             }
         } else {
             res.statusCode = 500;
-            res.send(err.message)
+            res.send(err.message);
         }
     });
 });
 
-// TODO - implement registration
 app.post('/register', bodyParser.urlencoded({ extended: false }), (req, res) => {
-    console.log(req.body);
-
-    res.send('This is register!');
+    client.query('INSERT INTO client(username, email, password) VALUES($1, $2, $3)', [req.body.username, req.body.email, req.body.password], (err, result) => {
+        if(!err) {
+            res.statusCode = 200;
+            res.send('User registered!');
+        } else {
+            res.statusCode = 400;
+            res.send(err.message);
+        }
+    });
 });
 
 // TODO - implement saving comments
