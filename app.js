@@ -19,7 +19,7 @@ app.get('/get_user_data/:id', (req, res) => {
         if (!err) {
             if (result.rowCount > 0) {
                 res.statusCode = 200;
-                res.send(result.rows[0]);
+                res.send({ username: result.rows[0].username, email: result.rows[0].email, is_admin: result.rows[0].is_admin });
             } else {
                 res.statusCode = 400;
                 res.send('No user was found');
