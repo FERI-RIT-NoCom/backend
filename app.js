@@ -14,12 +14,18 @@ app.get('/', (req, res) => {
     res.send('We are NoCom!');
 });
 
-// TODO - retun data for user
 app.get('/get_user_data/:id', (req, res) => {
     client.query(`SELECT * FROM client WHERE id_client = ${req.params.id}`, (err, result) => {
         if (!err) {
-            res.send(result.rows);
+            if (result.rowCount > 0) {
+                res.statusCode = 200;
+                res.send(result.rows[0]);
+            } else {
+                res.statusCode = 400;
+                res.send('No user was found');
+            }
         } else {
+            res.statusCode = 500;
             res.send(err)
         }
     })
