@@ -26,7 +26,7 @@ app.get('/get_user_data/:id', (req, res) => {
             }
         } else {
             res.statusCode = 500;
-            res.send(err)
+            res.send(err.message)
         }
     })
 });
@@ -42,11 +42,21 @@ app.get('/comments_liked_by_user/:id', (req, res) => {
 });
 
 // POST
-// TODO - implement login
 app.post('/login', bodyParser.urlencoded({ extended: false }), (req, res) => {
-    console.log(req.body);
-
-    res.send('This is login!');
+    client.query('SELECT * FROM client WHERE username = $1 AND password = $2', [req.body.username, req.body.password] , (err, result) => {
+        if (!err) {
+            if (result.rowCount > 0) {
+                res.statusCode = 200;
+                res.send({ username: result.rows[0].username, email: result.rows[0].email, is_admin: result.rows[0].is_admin });
+            } else {
+                res.statusCode = 400;
+                res.send('User does not exist');
+            }
+        } else {
+            res.statusCode = 500;
+            res.send(err.message)
+        }
+    });
 });
 
 // TODO - implement registration
