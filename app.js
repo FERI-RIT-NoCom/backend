@@ -71,11 +71,39 @@ app.post('/register', bodyParser.urlencoded({ extended: false }), (req, res) => 
     });
 });
 
-// TODO - implement saving comments
-app.post('/new_comment', bodyParser.urlencoded({ extended: false }), (req, res) => {
-    console.log(req.body);
+app.post('/new_comment', bodyParser.urlencoded({ extended: false }), async (req, res) => {
+    var id_web;
+    var fail = false;
+
+    do {   
+        await client.query('SELECT id_website FROM website WHERE url = $1', [req.body.url])
+        .then(async resp => {
+            if (resp.rowCount > 0) {
+                id_web = resp.rows[0].id_website;
+            } else {
+                _ = await client.query('INSERT INTO website(url) VALUES($1)', [req.body.url]);
+            }
+        })
+        .catch(err => { 
+            res.statusCode = 400;
+            res.send(err.message); 
+
+            fail = true;
+        });
+    } while (id_web == undefined);
     
-    res.send('This is new comment!');
+    await client.query('INSERT INTO comment(comment_value, is_nsfw, fk_client, fk_website) VALUES($1, $2, $3, $4)', [req.body.comment, req.body.is_nsfw, req.body.id_client, id_web])
+    .catch(err => { 
+        res.statusCode = 400;
+        res.send(err.message); 
+        
+        fail = true;
+    });
+
+    if (!fail) {
+        res.statusCode = 200;
+        res.send('Comment saved!');    
+    }
 });
 
 // TODO - implement liking comments
