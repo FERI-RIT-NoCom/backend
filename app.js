@@ -104,13 +104,14 @@ app.post('/new_comment', bodyParser.urlencoded({ extended: false }), async (req,
     var id_web;
     var fail = false;
 
+    var hashedUrl = crypto.createHash('sha256').update(req.body.url).digest('hex'); 
     do {
-        await client.query('SELECT id_website FROM website WHERE url = $1', [req.body.url])
+        await client.query('SELECT id_website FROM website WHERE url = $1', [hashedUrl])
             .then(async resp => {
                 if (resp.rowCount > 0) {
                     id_web = resp.rows[0].id_website;
                 } else {
-                    _ = await client.query('INSERT INTO website(url) VALUES($1)', [req.body.url]);
+                    _ = await client.query('INSERT INTO website(url) VALUES($1)', [hashedUrl]);
                 }
             })
             .catch(err => {
