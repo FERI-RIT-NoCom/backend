@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const client = require('./connection.js');
+const crypto = require('crypto');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.use(bodyParser.json());
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
@@ -65,7 +66,9 @@ app.get('/comments_liked_by_user/:id', (req, res) => {
 
 // POST
 app.post('/login', bodyParser.urlencoded({ extended: false }), (req, res) => {
-    client.query('SELECT * FROM client WHERE username = $1 AND password = $2', [req.body.username, req.body.password], (err, result) => {
+    var hashedPwd = crypto.createHash('sha256').update(req.body.password).digest('hex');
+
+    client.query('SELECT * FROM client WHERE username = $1 AND password = $2', [req.body.username, hashedPwd], (err, result) => {
         if (!err) {
             if (result.rowCount > 0) {
                 res.statusCode = 200;
@@ -82,7 +85,9 @@ app.post('/login', bodyParser.urlencoded({ extended: false }), (req, res) => {
 });
 
 app.post('/register', bodyParser.urlencoded({ extended: false }), (req, res) => {
-    client.query('INSERT INTO client(username, email, password) VALUES($1, $2, $3)', [req.body.username, req.body.email, req.body.password], (err, result) => {
+    var hashedPwd = crypto.createHash('sha256').update(req.body.password).digest('hex');
+
+    client.query('INSERT INTO client(username, email, password) VALUES($1, $2, $3)', [req.body.username, req.body.email, hashedPwd], (err, _) => {
         if (!err) {
             res.statusCode = 200;
             res.send('User registered!');
