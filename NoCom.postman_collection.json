@@ -94,6 +94,15 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"like\": false,\r\n    \"id_client\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:3000/like/1",
 					"protocol": "http",
@@ -135,7 +144,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/comments_from_user/1",
+					"raw": "http://localhost:3000/comments_from_user/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -143,7 +152,7 @@
 					"port": "3000",
 					"path": [
 						"comments_from_user",
-						"1"
+						"2"
 					]
 				}
 			},
