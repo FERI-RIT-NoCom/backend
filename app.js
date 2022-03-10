@@ -26,9 +26,9 @@ app.get('/get_user_data/:id', (req, res) => {
             }
         } else {
             res.statusCode = 500;
-            res.send(err.message)
+            res.send(err.message);
         }
-    })
+    });
 });
 
 
@@ -46,10 +46,17 @@ app.get('/comments_from_user/:id', (req, res) => {
             }
         } else {
             res.statusCode = 500;
-            res.send(err.message)
+            res.send(err.message);
         }
-    })
-})
+    });
+});
+
+// TODO - retun all comments for requested website
+app.get('/comments_on_website', (req, res) => {
+    console.log(req.body.url);
+
+    res.send('API-ju je potrebno dodati klic, ki bo pridobil vse komentarje, ki so bili objavljeni za določeno spletno stran');
+});
 
 // TODO - return all liked comments by user
 app.get('/comments_liked_by_user/:id', (req, res) => {

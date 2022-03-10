@@ -119,6 +119,37 @@
 			"response": []
 		},
 		{
+			"name": "comments on website",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"url\": \"www.website.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/comments_on_website",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"comments_on_website"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user data",
 			"request": {
 				"method": "GET",
