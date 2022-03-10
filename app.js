@@ -121,7 +121,43 @@ app.post('/new_comment', bodyParser.urlencoded({ extended: false }), async (req,
     }
 });
 
-// TODO - implement liking comments
 app.post('/like/:id', (req, res) => {
-    res.send('You liked comment with ID:' + req.params.id);
+    if (req.body.like == true){
+        client.query('UPDATE comment SET nr_likes = nr_likes + 1  WHERE id_comment = $1;', [req.params.id], (err, result) => {
+            if (!err) {
+                client.query('INSERT INTO client_comment (fk_client,fk_comment) VALUES($1, $2);', [req.body.id_client, req.params.id], (err, result) => {
+                    if (err) {
+                        res.statusCode = 400;
+                        res.send(err.message);
+                    }else{
+                        res.statusCode = 200;
+                        res.send('Like added');
+                    }
+                });
+            }else{
+                res.statusCode = 400;
+                res.send(err.message);
+            }
+        });
+        
+
+    }else{
+        client.query('UPDATE comment SET nr_likes = nr_likes - 1  WHERE id_comment = $1;', [req.params.id], (err, result) => {
+            if (!err) {
+                client.query('DELETE FROM client_comment WHERE fk_client = $1 and fk_comment = $2;', [req.body.id_client,req.params.id], (err, result) => {
+                    if (err) {
+                        res.statusCode = 400;
+                        res.send(err.message);
+                    }else{
+                        res.statusCode = 200;
+                        res.send('Like subtracted');
+                    }
+                });
+            }else{
+                res.statusCode = 400;
+                res.send(err.message);
+            }
+        });
+        
+    }
 });
