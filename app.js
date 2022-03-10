@@ -33,16 +33,13 @@ app.get('/get_user_data/:id', (req, res) => {
 
 
 app.get('/comments_from_user/:id', (req, res) => {
-    client.query(`SELECT * FROM comment 
+    client.query(`SELECT id_comment, comment_value, posted, nr_likes, is_nsfw, url  FROM comment 
     JOIN client ON comment.fk_client = client.id_client 
     JOIN website ON comment.fk_website = website.id_website WHERE comment.fk_client = ${req.params.id}`, (err, result) => {
         if (!err) {
             if (result.rowCount > 0) {
                 res.statusCode = 200;
-                res.send({
-                    comment_value: result.rows[0].comment_value, posted: result.rows[0].posted, nr_likes: result.rows[0].nr_likes,
-                    is_nsfw: result.rows[0].is_nsfw, fk_client: result.rows[0].username, fk_website: result.rows[0].url
-                });
+                res.send(result.rows);
             } else {
                 res.statusCode = 400;
                 res.send('No comments were found');
