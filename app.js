@@ -1,12 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const client = require('./connection.js');
+const cors = require('cors');
 const crypto = require('crypto');
 
 const app = express();
 const PORT = 3001;
 
 app.use(bodyParser.json());
+app.use(cors());
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 client.connect();
 
