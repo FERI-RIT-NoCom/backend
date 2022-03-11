@@ -208,6 +208,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "change nsfw",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"is_nsfw\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/change_nsfw/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"change_nsfw",
+						"1"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
