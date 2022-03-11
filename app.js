@@ -174,3 +174,20 @@ app.post('/like/:id', (req, res) => {
         
     }
 });
+
+app.put('/change_nsfw/:id', (req, res) => {
+    client.query('UPDATE comment SET is_nsfw = $1 WHERE id_comment = $2;', [req.body.is_nsfw, req.params.id], (err, result) => {
+        if (!err) {
+            if (result.rowCount > 0) {
+                res.statusCode = 200;
+                res.send((req.body.is_nsfw == true ? "Comment is NSFW" : "Comment is SFW"));
+            } else {
+                res.statusCode = 400;
+                res.send("Comment does not exist!");
+            }
+        } else {
+            res.statusCode = 400;
+            res.send(err.message);
+        }
+    });
+});
