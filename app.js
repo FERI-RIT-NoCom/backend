@@ -5,7 +5,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -18,11 +18,17 @@ app.get('/', (req, res) => {
 });
 
 app.get('/get_user_data/:id', (req, res) => {
-    client.query(`SELECT * FROM client WHERE id_client = ${req.params.id}`, (err, result) => {
+    client.query(`SELECT *
+                  FROM client
+                  WHERE id_client = ${req.params.id}`, (err, result) => {
         if (!err) {
             if (result.rowCount > 0) {
                 res.statusCode = 200;
-                res.send({ username: result.rows[0].username, email: result.rows[0].email, is_admin: result.rows[0].is_admin });
+                res.send({
+                    username: result.rows[0].username,
+                    email: result.rows[0].email,
+                    is_admin: result.rows[0].is_admin
+                });
             } else {
                 res.statusCode = 400;
                 res.send('No user was found');
@@ -36,9 +42,11 @@ app.get('/get_user_data/:id', (req, res) => {
 
 
 app.get('/comments_from_user/:id', (req, res) => {
-    client.query(`SELECT id_comment, comment_value, posted, nr_likes, is_nsfw, url  FROM comment 
-    JOIN client ON comment.fk_client = client.id_client 
-    JOIN website ON comment.fk_website = website.id_website WHERE comment.fk_client = ${req.params.id}`, (err, result) => {
+    client.query(`SELECT id_comment, comment_value, posted, nr_likes, is_nsfw, url
+                  FROM comment
+                           JOIN client ON comment.fk_client = client.id_client
+                           JOIN website ON comment.fk_website = website.id_website
+                  WHERE comment.fk_client = ${req.params.id}`, (err, result) => {
         if (!err) {
             if (result.rowCount > 0) {
                 res.statusCode = 200;
@@ -67,14 +75,18 @@ app.get('/comments_liked_by_user/:id', (req, res) => {
 });
 
 // POST
-app.post('/login', bodyParser.urlencoded({ extended: false }), (req, res) => {
+app.post('/login', bodyParser.urlencoded({extended: false}), (req, res) => {
     var hashedPwd = crypto.createHash('sha256').update(req.body.password).digest('hex');
 
     client.query('SELECT * FROM client WHERE username = $1 AND password = $2', [req.body.username, hashedPwd], (err, result) => {
         if (!err) {
             if (result.rowCount > 0) {
                 res.statusCode = 200;
-                res.send({ username: result.rows[0].username, email: result.rows[0].email, is_admin: result.rows[0].is_admin });
+                res.send({
+                    username: result.rows[0].username,
+                    email: result.rows[0].email,
+                    is_admin: result.rows[0].is_admin
+                });
             } else {
                 res.statusCode = 400;
                 res.send('User does not exist');
@@ -86,7 +98,7 @@ app.post('/login', bodyParser.urlencoded({ extended: false }), (req, res) => {
     });
 });
 
-app.post('/register', bodyParser.urlencoded({ extended: false }), (req, res) => {
+app.post('/register', bodyParser.urlencoded({extended: false}), (req, res) => {
     var hashedPwd = crypto.createHash('sha256').update(req.body.password).digest('hex');
 
     client.query('INSERT INTO client(username, email, password) VALUES($1, $2, $3)', [req.body.username, req.body.email, hashedPwd], (err, _) => {
@@ -100,11 +112,11 @@ app.post('/register', bodyParser.urlencoded({ extended: false }), (req, res) => 
     });
 });
 
-app.post('/new_comment', bodyParser.urlencoded({ extended: false }), async (req, res) => {
+app.post('/new_comment', bodyParser.urlencoded({extended: false}), async (req, res) => {
     var id_web;
     var fail = false;
 
-    var hashedUrl = crypto.createHash('sha256').update(req.body.url).digest('hex'); 
+    var hashedUrl = crypto.createHash('sha256').update(req.body.url).digest('hex');
     do {
         await client.query('SELECT id_website FROM website WHERE url = $1', [hashedUrl])
             .then(async resp => {
@@ -137,41 +149,41 @@ app.post('/new_comment', bodyParser.urlencoded({ extended: false }), async (req,
 });
 
 app.post('/like/:id', (req, res) => {
-    if (req.body.like == true){
+    if (req.body.like == true) {
         client.query('UPDATE comment SET nr_likes = nr_likes + 1  WHERE id_comment = $1;', [req.params.id], (err, result) => {
             if (!err) {
                 client.query('INSERT INTO client_comment (fk_client, fk_comment) VALUES($1, $2);', [req.body.id_client, req.params.id], (err, result) => {
                     if (err) {
                         res.statusCode = 400;
                         res.send(err.message);
-                    }else{
+                    } else {
                         res.statusCode = 200;
                         res.send('Like added');
                     }
                 });
-            }else{
+            } else {
                 res.statusCode = 400;
                 res.send(err.message);
             }
         });
-    }else{
+    } else {
         client.query('UPDATE comment SET nr_likes = nr_likes - 1  WHERE id_comment = $1;', [req.params.id], (err, result) => {
             if (!err) {
                 client.query('DELETE FROM client_comment WHERE fk_client = $1 AND fk_comment = $2;', [req.body.id_client, req.params.id], (err, result) => {
                     if (err) {
                         res.statusCode = 400;
                         res.send(err.message);
-                    }else{
+                    } else {
                         res.statusCode = 200;
                         res.send('Like subtracted');
                     }
                 });
-            }else{
+            } else {
                 res.statusCode = 400;
                 res.send(err.message);
             }
         });
-        
+
     }
 });
 

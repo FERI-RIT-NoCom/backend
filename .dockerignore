@@ -1,0 +1,9 @@
+Dockerfile
+.dockerignore
+.git/
+.gitignore
+.idea/
+NoCom.postman_collection.json
+node_modules/
+README.md
+upload.sh
