@@ -70,8 +70,16 @@ app.get('/comments_on_website', (req, res) => {
 });
 
 // TODO - return all liked comments by user
-app.get('/comments_liked_by_user/:id', (req, res) => {
-    res.send('Here are all liked comments from user with ID:' + req.params.id);
+app.get('/comments_liked_by_user/:id', bodyParser.urlencoded({extended: false}), (req, res) => {
+    client.query('SELECT comment.* FROM comment INNER JOIN client_comment ON comment.id_comment = client_comment.id_client_comment WHERE client_comment.fk_client = $1;', [req.params.id], (err, result) => {
+        if (!err) {
+            res.statusCode = 200;
+            res.send(result.rows);
+        } else {
+            res.statusCode = 400;
+            res.send(err.message);
+        }
+    });
 });
 
 // POST
