@@ -69,9 +69,8 @@ app.get('/comments_on_website', (req, res) => {
     res.send('API-ju je potrebno dodati klic, ki bo pridobil vse komentarje, ki so bili objavljeni za določeno spletno stran');
 });
 
-// TODO - return all liked comments by user
 app.get('/comments_liked_by_user/:id', bodyParser.urlencoded({extended: false}), (req, res) => {
-    client.query('SELECT comment.* FROM comment INNER JOIN client_comment ON comment.id_comment = client_comment.id_client_comment WHERE client_comment.fk_client = $1;', [req.params.id], (err, result) => {
+    client.query('SELECT comment.* FROM comment INNER JOIN client_comment ON comment.id_comment = client_comment.fk_comment WHERE client_comment.fk_client = $1;', [req.params.id], (err, result) => {
         if (!err) {
             res.statusCode = 200;
             res.send(result.rows);
