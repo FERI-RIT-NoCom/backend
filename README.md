@@ -5,12 +5,12 @@
 </div>
 Basic API implementation for NoCom project. It provides endpoints for the NoCom plugin to communicate with database.
 <br><br>
-This are the main functions:
-- Login
-- Registration for new users
-- Adding comments by logged-in users
-- Retrieving all liked comments for logged-in user
-- Retrieving all comments posted by logged-in user
+This are the main functions:</br>
+- Login</br>
+- Registration for new users</br>
+- Adding comments by logged-in users</br>
+- Retrieving all liked comments for logged-in user</br>
+- Retrieving all comments posted by logged-in user<br>
 <br><br>
 
 # Contributors
