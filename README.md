@@ -2,6 +2,7 @@
 <div align="center">
     <img alt="Express.js" src="https://img.shields.io/badge/node.js-3b7f3a?style=for-the-badge&logo=node.js&logoColor=white">
     <img alt="Express.js" src="https://img.shields.io/badge/express.js-90c53f?style=for-the-badge&logo=express&logoColor=white">
+    <img alt="Postman" src="https://img.shields.io/badge/Postman-dddddd?style=for-the-badge&logo=postman&logoColor=red"/>
 </div>
 Basic API implementation for NoCom project. It provides endpoints for the NoCom plugin to communicate with database.
 <br><br>
